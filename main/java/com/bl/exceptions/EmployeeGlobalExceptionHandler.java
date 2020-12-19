@@ -1,9 +1,11 @@
 package com.bl.exceptions;
 
 import com.bl.dto.ResponseDto;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,6 +25,20 @@ public class EmployeeGlobalExceptionHandler {
                 .map(objErr -> objErr.getDefaultMessage())
                 .collect(Collectors.toList());
         ResponseDto responseDto = new ResponseDto("Exception while processing REST Request", errorMessage);
+        return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpMessageNotWritableException.class)
+    public ResponseEntity<ResponseDto> handleHttpMessageNotWritableException(
+            HttpMessageNotWritableException exception) {
+        ResponseDto responseDto = new ResponseDto("Exception while processing REST Request", exception.getMessage());
+        return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(JsonMappingException.class)
+    public ResponseEntity<ResponseDto> handleJsonMappingException(
+            JsonMappingException exception) {
+        ResponseDto responseDto = new ResponseDto("Exception while processing REST Request", exception.getMessage());
         return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.BAD_REQUEST);
     }
 

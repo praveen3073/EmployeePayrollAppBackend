@@ -5,6 +5,7 @@ import lombok.NonNull;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -21,19 +22,28 @@ public class EmployeePayroll implements Serializable {
     private String name;
     private String salary;
     private String gender;
-    private String department;
+
+    @ElementCollection(fetch=FetchType.EAGER)
+    @CollectionTable(name = "employee_department", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "department")
+    private List<String> department;
+
     private String startDate;
+    private String notes;
+    private String profile;
 
     public EmployeePayroll(){
 
     }
 
-    public EmployeePayroll(@NonNull String name, String salary, String gender, String department, String startDate) {
+    public EmployeePayroll(@NonNull String name, String salary, String gender, List<String> department, String startDate, String notes, String profile) {
         this.name = name;
         this.salary = salary;
         this.gender = gender;
         this.department = department;
         this.startDate = startDate;
+        this.notes = notes;
+        this.profile = profile;
     }
 
     public Long getId() {
@@ -68,11 +78,11 @@ public class EmployeePayroll implements Serializable {
         this.gender = gender;
     }
 
-    public String getDepartment() {
+    public List<String> getDepartment() {
         return department;
     }
 
-    public void setDepartment(String department) {
+    public void setDepartment(List<String> department) {
         this.department = department;
     }
 
@@ -82,5 +92,21 @@ public class EmployeePayroll implements Serializable {
 
     public void setStartDate(String startDate) {
         this.startDate = startDate;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
 }

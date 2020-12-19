@@ -43,4 +43,10 @@ public class UserController {
         ResponseDto responseDto = new ResponseDto("Displaying All Records in DB", employeePayrollService.getAllUser());
         return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.OK);
     }
+
+    @GetMapping("/getbyid")
+    public ResponseEntity<ResponseDto> getUser(Long id){
+        ResponseDto responseDto = new ResponseDto("Displaying Records With ID " + id, employeePayrollService.getUser(id));
+        return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.OK);
+    }
 }

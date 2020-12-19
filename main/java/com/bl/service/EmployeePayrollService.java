@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,7 +29,9 @@ public class EmployeePayrollService {
                                                                     employeePayrollDto.getSalary(),
                                                                     employeePayrollDto.getGender(),
                                                                     employeePayrollDto.getDepartment(),
-                                                                    employeePayrollDto.getStartDate());
+                                                                    employeePayrollDto.getStartDate(),
+                                                                    employeePayrollDto.getNotes(),
+                                                                    employeePayrollDto.getProfile());
             return new EmployeePayrollDto(employeePayrollRepository.save(employeePayroll));
         }
 
@@ -41,17 +44,23 @@ public class EmployeePayrollService {
             if(Objects.nonNull(employeePayrollDto.getName())){
                 employeePayroll.setName(employeePayrollDto.getName());
             }
-            if(Objects.nonNull(employeePayroll.getSalary())){
-                employeePayroll.setSalary(employeePayroll.getSalary());
+            if(Objects.nonNull(employeePayrollDto.getSalary())){
+                employeePayroll.setSalary(employeePayrollDto.getSalary());
             }
             if(Objects.nonNull(employeePayrollDto.getDepartment())){
                 employeePayroll.setDepartment(employeePayrollDto.getDepartment());
             }
-            if(Objects.nonNull(employeePayroll.getGender())){
-                employeePayroll.setGender(employeePayroll.getGender());
+            if(Objects.nonNull(employeePayrollDto.getGender())){
+                employeePayroll.setGender(employeePayrollDto.getGender());
             }
-            if(Objects.nonNull(employeePayroll.getStartDate())){
-                employeePayroll.setStartDate(employeePayroll.getStartDate());
+            if(Objects.nonNull(employeePayrollDto.getStartDate())){
+                employeePayroll.setStartDate(employeePayrollDto.getStartDate());
+            }
+            if(Objects.nonNull(employeePayrollDto.getNotes())){
+                employeePayroll.setNotes(employeePayrollDto.getNotes());
+            }
+            if(Objects.nonNull(employeePayrollDto.getProfile())){
+                employeePayroll.setProfile(employeePayrollDto.getProfile());
             }
            return new EmployeePayrollDto(employeePayrollRepository.save(employeePayroll));
         }).orElseThrow(()-> new UserNotFoundException("User Not Found!"));
@@ -70,5 +79,9 @@ public class EmployeePayrollService {
                 .stream()
                 .map(employeePayroll -> new EmployeePayrollDto(employeePayroll))
                 .collect(Collectors.toList());
+    }
+
+    public Optional<EmployeePayroll> getUser(Long id) {
+        return employeePayrollRepository.findById(id);
     }
 }
